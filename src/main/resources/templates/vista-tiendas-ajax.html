@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>View Employees</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script>
+		$(document).ready(
+			function (){
+				$.getJSON("http://localhost:8080/api/tiendas", function(result){
+					$.each(result, function(key, value){
+						$("#tiendasJson").append(
+							value.idTienda + " " + value.nombreTienda + " " + value.maxCuadros + "<br>"
+						);
+					});
+				});
+			});
+	</script>
+</head>
+
+<body>
+	<div id="tiendasJson"></div>
+</body>
+
+</html>
