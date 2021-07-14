@@ -7,6 +7,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import es.david.core.exceptions.APIException;
+import es.david.core.exceptions.CuadroNotFoundException;
+import es.david.core.exceptions.TiendaNotFoundException;
 import es.david.core.models.entities.Cuadro;
 import es.david.core.models.repository.CuadroRepository;
 import es.david.core.models.repository.TiendaRepository;
@@ -26,6 +29,9 @@ public class CuadroServiceImpl implements ICuadroService {
 
 	@Override
 	public Optional<Cuadro> findById(Long id) {
+		
+		if(!cuadroRepository.findById(id).isPresent()) throw new CuadroNotFoundException(id);
+		
 		return cuadroRepository.findById(id);
 	}
 
@@ -36,12 +42,18 @@ public class CuadroServiceImpl implements ICuadroService {
 
 	@Override
 	public void deleteById(Long id) {
+		
+		if(!cuadroRepository.findById(id).isPresent()) throw new CuadroNotFoundException(id);
+		
 		cuadroRepository.deleteById(id);
 	}
 	
 
 	@Override
 	public List<Cuadro> saveAll(List<Cuadro> cuadros) {
+		
+		if(cuadros.isEmpty() || cuadros.size()==0) throw new APIException("La lista de cuadros esta vacía");
+		
 		return cuadroRepository.saveAll(cuadros);
 	}
 
@@ -53,11 +65,11 @@ public class CuadroServiceImpl implements ICuadroService {
 	@Override
 	public List<Cuadro> getCuadrosByNombreCuadro(String nombreCuadro) {
 		
-		List<Cuadro> cuadrosByName = cuadroRepository.findByNombreCuadroContainingIgnoreCase(nombreCuadro);
+		List<Cuadro> cuadrosByNombre= cuadroRepository.findByNombreCuadroContainingIgnoreCase(nombreCuadro);
 		
-		if(cuadrosByName.isEmpty()|| cuadrosByName.size()==0) System.err.println("Cuadros no encontrados");
+		if(cuadrosByNombre.isEmpty() || cuadrosByNombre.size()==0) throw new CuadroNotFoundException("No se encontraron cuadros con el nombre de: " + nombreCuadro);
 		
-		return cuadrosByName;
+		return cuadrosByNombre;
 	}
 
 	@Override
@@ -65,7 +77,7 @@ public class CuadroServiceImpl implements ICuadroService {
 
 		List<Cuadro> cuadrosByAutor = cuadroRepository.findByAutor(autor);
 		
-		if(cuadrosByAutor.isEmpty()|| cuadrosByAutor.size()==0) System.err.println("Cuadros no encontrados");
+		if(cuadrosByAutor.isEmpty()|| cuadrosByAutor.size()==0) throw new CuadroNotFoundException("No se encontraron cuadros con el autor: " + autor);
 
 		
 		return cuadrosByAutor;
@@ -76,7 +88,7 @@ public class CuadroServiceImpl implements ICuadroService {
 
 		List<Cuadro> cuadrosByPrecio = cuadroRepository.findByPrecioGreaterThan(precio);
 		
-		if(cuadrosByPrecio.isEmpty()|| cuadrosByPrecio.size()==0) System.err.println("Cuadros no encontrados");
+		if(cuadrosByPrecio.isEmpty() || cuadrosByPrecio.size()==0) throw new CuadroNotFoundException("No se encontraron cuadros con un precio superior a: " + precio);
 
 		return cuadrosByPrecio;
 	}

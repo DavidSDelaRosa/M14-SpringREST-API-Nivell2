@@ -10,11 +10,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import es.david.core.exceptions.APIException;
+import es.david.core.exceptions.CuadroNotFoundException;
 import es.david.core.models.entities.Cuadro;
 import es.david.core.models.service.ICuadroService;
 
 @RestController
 @RequestMapping("/api/tiendas")
+@CrossOrigin(origins = "*")
 public class CuadroController {
 	
 	@Autowired
@@ -22,6 +25,7 @@ public class CuadroController {
 
 	@PostMapping("/cuadros")
 	public ResponseEntity<?> create(@RequestBody Cuadro cuadro){
+		
 		return ResponseEntity.status(HttpStatus.CREATED).body(cuadroService.save(cuadro));
 	}
 	
@@ -112,6 +116,7 @@ public class CuadroController {
 	public ResponseEntity<?> readByPrecio(@PathVariable double precio){
 		
 		List<Cuadro> cuadrosPrecio = cuadroService.getCuadrosByPrecioGreaterThan(precio);
+		
 		
 		return ResponseEntity.ok(cuadrosPrecio);
 	}

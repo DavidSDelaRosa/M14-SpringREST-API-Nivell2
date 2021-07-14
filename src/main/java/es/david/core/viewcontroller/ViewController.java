@@ -8,9 +8,16 @@ public class ViewController {
 	
 	@RequestMapping("/view-tiendas")
 	public String listarTiendas() {
-		return "vista-tiendas-ajax";
+		System.out.println("Listando tiendas...");
+		return "index-tiendas";
 	}
 	
+	@RequestMapping("/view-cuadros")
+	public String listarCuadros() {
+		return "index-cuadros";
+	}
+	
+	/*
 	@RequestMapping("/add-tienda")
 	public String addTienda() {
 		return "add-tienda";
@@ -19,6 +26,6 @@ public class ViewController {
 	@RequestMapping("/home")
 	public String home() {
 		return "template";
-	}
+	}*/
 
 }

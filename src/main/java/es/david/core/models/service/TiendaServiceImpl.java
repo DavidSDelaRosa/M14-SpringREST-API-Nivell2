@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import es.david.core.exceptions.TiendaNotFoundException;
 import es.david.core.models.entities.Tienda;
 import es.david.core.models.repository.TiendaRepository;
 
@@ -22,6 +23,9 @@ public class TiendaServiceImpl implements ITiendaService {
 
 	@Override
 	public Optional<Tienda> findById(Long id) {
+		
+		if(!tiendaRepository.findById(id).isPresent()) throw new TiendaNotFoundException(id);
+		
 		return tiendaRepository.findById(id);
 	}
 
@@ -32,6 +36,9 @@ public class TiendaServiceImpl implements ITiendaService {
 
 	@Override
 	public void deleteById(Long id) {
+		
+		if(!tiendaRepository.findById(id).isPresent()) throw new TiendaNotFoundException(id);
+		
 		tiendaRepository.deleteById(id);
 	}
 	
@@ -50,7 +57,7 @@ public class TiendaServiceImpl implements ITiendaService {
 		
 		List<Tienda> tiendasByName = tiendaRepository.findByNombreTiendaContainingIgnoreCase(nombreTienda);
 		
-		if(tiendasByName.isEmpty() || tiendasByName.size()==0) System.err.println("Tienda no encontrada");
+		if(tiendasByName.isEmpty() || tiendasByName.size()==0) throw new TiendaNotFoundException("No se encontraron tiendas con el nombre: " + nombreTienda);
 		
 		return tiendasByName;
 	}
@@ -60,7 +67,7 @@ public class TiendaServiceImpl implements ITiendaService {
 		
 		List<Tienda> tiendasByCapacity = tiendaRepository.findByMaxCuadrosGreaterThan(maxCuadros);
 		
-		if(tiendasByCapacity.isEmpty() || tiendasByCapacity.size()==0) System.err.println("Tienda no encontrada");
+		if(tiendasByCapacity.isEmpty() || tiendasByCapacity.size()==0) throw new TiendaNotFoundException("No se encontraron tiendas con una capacidad superior a: " + maxCuadros);
 		
 		return tiendasByCapacity;
 	}
