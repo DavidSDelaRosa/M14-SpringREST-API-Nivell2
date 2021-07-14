@@ -1,5 +1,7 @@
 package es.david.core.models.service;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +39,7 @@ public class CuadroServiceImpl implements ICuadroService {
 
 	@Override
 	public Cuadro save(Cuadro cuadro) {
+		cuadro.setFechaCreacion(Timestamp.valueOf(LocalDateTime.now()));
 		return cuadroRepository.save(cuadro);
 	}
 
@@ -96,7 +99,12 @@ public class CuadroServiceImpl implements ICuadroService {
 	@Override
 	public Cuadro saveOnTienda(Cuadro cuadro, Long idTienda) {
 		
+		if(!tiendaRepository.findById(idTienda).isPresent()) throw new TiendaNotFoundException(idTienda);
+		
 		cuadro.setTienda(tiendaRepository.findById(idTienda).get());
+		
+		cuadro.setFechaCreacion(Timestamp.valueOf(LocalDateTime.now()));
+		
 		return cuadroRepository.save(cuadro);
 	}
 
@@ -109,7 +117,7 @@ public class CuadroServiceImpl implements ICuadroService {
 			if(c.getTienda().getIdTienda()==idTienda) cuadrosPorTienda.add(c);
 		}
 		
-		if(cuadrosPorTienda.isEmpty()||cuadrosPorTienda.size()==0) System.err.println("No se han encontrado cuadros por esa tienda");
+		if(cuadrosPorTienda.isEmpty()||cuadrosPorTienda.size()==0) throw new CuadroNotFoundException("No se encontraron cuadros para la tienda con id: " + idTienda);
 		
 		return cuadrosPorTienda;
 	}

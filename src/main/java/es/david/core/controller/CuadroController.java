@@ -1,5 +1,7 @@
 package es.david.core.controller;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -65,7 +67,7 @@ public class CuadroController {
 		oCuadro.get().setNombreCuadro(cuadro.getNombreCuadro());
 		oCuadro.get().setAutor(cuadro.getAutor());
 		oCuadro.get().setPrecio(cuadro.getPrecio());
-		oCuadro.get().setFechaCreacion(cuadro.getFechaCreacion());
+		oCuadro.get().setFechaCreacion(Timestamp.valueOf(LocalDateTime.now()));
 		oCuadro.get().setTienda(cuadro.getTienda());
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(cuadroService.save(oCuadro.get()));
