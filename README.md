@@ -1,6 +1,9 @@
 # M14-SpringREST-API-Nivell2
 Modulo 14 ITAcademy Backend Java con Spring
 
+Contiene dos colecciones en Postman, una con las llamadas correctas a la API, con métodos POST, PUT, GET y DELETE, con sus correspondiendtes descripciones para obtener más información. Asi como otra colección con los errores frecuentes en las llamadas a la API, también con descripción.
+
+
 MANEJO DE ERRORES:
 
 Method not supported
